@@ -1,5 +1,7 @@
 package humanhash
 
+// Default wordlist, customize by calling Wordlist("file.txt")
+
 var (
 	defaultWordList = []string{
 		"ack", "alabama", "alanine", "alaska", "alpha", "angel", "apart", "april",
