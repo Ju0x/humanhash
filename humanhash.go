@@ -14,11 +14,11 @@ var (
 )
 
 func init() {
-	Wordlist("./wordlists/default.txt")
+	Wordlist("default.txt")
 }
 
 // Defines a custom wordlist (Should have 256 words)
-// Default is ./wordlists/default.txt
+// Default is default.txt
 func Wordlist(path string) {
 	file, err := os.Open(path)
 
