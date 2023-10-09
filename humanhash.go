@@ -10,15 +10,10 @@ import (
 )
 
 var (
-	wordList = []string{}
+	wordList = defaultWordList
 )
 
-func init() {
-	Wordlist("default_wordlist.txt")
-}
-
 // Defines a custom wordlist (Should have 256 words)
-// Default is default_wordlist.txt
 func Wordlist(path string) {
 	file, err := os.Open(path)
 
