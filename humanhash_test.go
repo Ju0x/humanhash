@@ -2,6 +2,7 @@ package humanhash_test
 
 import (
 	"crypto/sha256"
+	"errors"
 	"fmt"
 	"testing"
 
@@ -9,6 +10,11 @@ import (
 )
 
 func TestHumanHash(t *testing.T) {
+	generateHumanHash(t)
+	generateHumanHashUUID(t)
+}
+
+func generateHumanHash(t *testing.T) {
 	s := "Test"
 
 	h := sha256.New()
@@ -22,5 +28,18 @@ func TestHumanHash(t *testing.T) {
 	if err != nil {
 		t.Error(err)
 	}
-	fmt.Println(r)
+
+	if r != "autumn-papa-muppet-aspen" {
+		t.Error(errors.New("hash not matching"))
+	}
+}
+
+func generateHumanHashUUID(t *testing.T) {
+	hash, uuid, err := humanhash.UUID()
+
+	if err != nil {
+		t.Error(err)
+	}
+
+	fmt.Printf("Humanhash: %s UUID: %s\n", hash, uuid)
 }

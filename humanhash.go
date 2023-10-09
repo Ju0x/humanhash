@@ -5,6 +5,8 @@ import (
 	"errors"
 	"os"
 	"strings"
+
+	"github.com/google/uuid"
 )
 
 var (
@@ -15,10 +17,11 @@ func init() {
 	Wordlist("./wordlists/default.txt")
 }
 
-// Define a custom wordlist (Should have 256 words)
+// Defines a custom wordlist (Should have 256 words)
 // Default is ./wordlists/default.txt
 func Wordlist(path string) {
-	file, err := os.Open(path) // Replace "file.txt" with the path to your file
+	file, err := os.Open(path)
+
 	if err != nil {
 		panic(err)
 	}
@@ -37,6 +40,10 @@ func Wordlist(path string) {
 // Given digest will be converted to a human-hash.
 // wordcount specifies the output of words in the hash (normally 4)
 // seperator will specify how the words will be seperated (normally "-")
+//
+// WARNING:
+// Human-hashes aren't safe! The chance of a collision with 256 words is 256^wordcount (With 4 words 1 : ~4.3 Billion)
+// Only use them for a better-readable version of a modern hash function.
 func Humanize(digest []byte, wordcount int, seperator string) (string, error) {
 	compressed, err := compress(digest, wordcount)
 	if err != nil {
@@ -52,6 +59,7 @@ func Humanize(digest []byte, wordcount int, seperator string) (string, error) {
 	return strings.Join(result, seperator), err
 }
 
+// Compresses the given digest into <wordcount> segments
 func compress(digest []byte, wordcount int) ([]byte, error) {
 	res := make([]byte, wordcount)
 	length := len(digest)
@@ -77,4 +85,11 @@ func compress(digest []byte, wordcount int) ([]byte, error) {
 	}
 
 	return res, nil
+}
+
+// Defines a pair of UUID and the related Humanhash
+func UUID() (string, uuid.UUID, error) {
+	id := uuid.New()
+	humanhash, err := Humanize(id[:], 4, "-")
+	return humanhash, id, err
 }
