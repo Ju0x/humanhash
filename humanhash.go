@@ -23,6 +23,8 @@ func Wordlist(path string) {
 	}
 	defer file.Close()
 
+	wordList = []string{}
+
 	scanner := bufio.NewScanner(file)
 	for scanner.Scan() {
 		wordList = append(wordList, scanner.Text())

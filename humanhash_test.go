@@ -17,6 +17,8 @@ func TestHumanHash(t *testing.T) {
 func generateHumanHash(t *testing.T) {
 	s := "Test"
 
+	humanhash.Wordlist("example_wordlist.txt")
+
 	h := sha256.New()
 
 	h.Write([]byte(s))
