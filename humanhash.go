@@ -1,3 +1,4 @@
+// Humanhash establishes a human-readable representation of a digest
 package humanhash
 
 import (
