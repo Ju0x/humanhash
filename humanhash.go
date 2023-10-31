@@ -35,6 +35,15 @@ func Wordlist(path string) {
 	}
 }
 
+func findWords(compressed []byte) []string {
+	result := make([]string, len(compressed))
+
+	for i, comp_byte := range compressed {
+		result[i] = wordList[comp_byte]
+	}
+	return result
+}
+
 // Given digest will be converted to a human-hash.
 // wordcount specifies the output of words in the hash (normally 4)
 // seperator will specify how the words will be seperated (normally "-")
@@ -48,11 +57,7 @@ func Humanize(digest []byte, wordcount int, seperator string) (string, error) {
 		return "", err
 	}
 
-	result := make([]string, len(compressed))
-
-	for i, comp_byte := range compressed {
-		result[i] = wordList[comp_byte]
-	}
+	result := findWords(compressed)
 
 	return strings.Join(result, seperator), err
 }
@@ -90,4 +95,26 @@ func UUID() (string, uuid.UUID, error) {
 	id := uuid.New()
 	humanhash, err := Humanize(id[:], 4, "-")
 	return humanhash, id, err
+}
+
+// More options for the resulting Humanhash with an UUID
+// wordcount specifies the output of words in the hash (normally 4)
+// seperator will specify how the words will be seperated (normally "-")
+// wordFunc defines a function where every word from the humanhash will pass through (e.g. to uppercase every word)
+func UUIDCustom(wordcount int, seperator string, wordFunc func(s string) string) (string, uuid.UUID, error) {
+	id := uuid.New()
+
+	compressed, err := compress(id[:], wordcount)
+
+	if err != nil {
+		return "", uuid.UUID{}, err
+	}
+
+	words := findWords(compressed)
+
+	for i, word := range words {
+		words[i] = wordFunc(word)
+	}
+
+	return strings.Join(words, seperator), id, err
 }

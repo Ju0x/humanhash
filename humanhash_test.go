@@ -4,6 +4,7 @@ import (
 	"crypto/sha256"
 	"errors"
 	"fmt"
+	"strings"
 	"testing"
 
 	"github.com/Ju0x/humanhash"
@@ -44,4 +45,12 @@ func generateHumanHashUUID(t *testing.T) {
 	}
 
 	fmt.Printf("Humanhash: %s UUID: %s\n", hash, uuid)
+
+	hash2, uuid2, err := humanhash.UUIDCustom(8, " ", func(s string) string { return strings.ToTitle(s) })
+
+	if err != nil {
+		t.Error(err)
+	}
+
+	fmt.Printf("Humanhash: %s UUID: %s\n", hash2, uuid2)
 }
